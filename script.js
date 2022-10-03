@@ -17,10 +17,16 @@ setInterval(endGame, 100)
 ////////////////////////////////////////////////////////////
 
 document.addEventListener('keyup', (e) =>{
+    console.log(e)
     if(e.keyCode === 37) { moveLeft() }
     else if (e.keyCode === 39) { moveRight() }
     else return
 });
+document.addEventListener('click', (e) =>{
+    if (e.target.classList.contains('left-btn')) { moveLeft() }
+    else if(e.target.classList.contains('right-btn')) { moveRight() }
+    else return
+})
 document.addEventListener('animationiteration', randomPosition);
 document.addEventListener('animationiteration', scoreIncrease)
 
@@ -54,6 +60,7 @@ function moveRight() {
 function randomPosition() {
     const randomPosition = Math.floor((Math.random() *3)) ;
     obstacle.style.left = randomPosition * 100 +'px';
+    
 }
 
 
@@ -68,10 +75,13 @@ function endGame() {
     let obstacleLeft = 
     parseInt(window.getComputedStyle(obstacle).getPropertyValue('left'));
     
-    // console.log(playerTop)
+
     if(obstacleTop > playerTop - (playerWidht/1.1) && playerLeft === obstacleLeft ) {
-        alert('Your score was'+ ' ' + scoreCounter);
-        scoreCounter = -1;
+        scoreCounter = 0;
+        obstacle.classList.remove('animation');
+        dialog.showModal();
+        scoreBoard.classList.add('show-score');
+
     }
 }
 
@@ -82,4 +92,15 @@ function scoreIncrease() {
 scoreBoard.innerText = 'SCORE:' + ' ' + scoreCounter;
 
 }
-  
+const dialog = document.querySelector('.modal');
+const dialogButton = dialog.querySelector('.dialog__button')
+console.log(dialogButton)
+  dialog.showModal();
+
+dialogButton.addEventListener('click', () => {
+    scoreBoard.innerText = 'SCORE: 0';
+    scoreBoard.classList.remove('show-score')
+    dialog.close();
+    obstacle.classList.add('animation');
+})
+
